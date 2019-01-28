@@ -40,7 +40,6 @@ const defaultItemOptions = {
     },
     meta: {
         isDragging: false,
-        pseudo: false,
     }
 }
 
@@ -80,7 +79,6 @@ const defaultGridOptions = {
     // class name for the resize handle
     resizeClassName: 'snap-resize-handle',
     enableCSS3: true,
-    // todo document
     algorithm: null,
 }
 

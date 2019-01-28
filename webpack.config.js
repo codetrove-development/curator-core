@@ -3,7 +3,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const baseConfig = {
   context: __dirname,
-  devtool: 'source-map',
+  
   entry: {
     snapperCore: './src/snapper-core',
   },
@@ -21,6 +21,7 @@ const baseConfig = {
 }
 
 const devConfig = merge( baseConfig, {
+  devtool: 'source-map',
   output: {
     path: __dirname + "/build",
     filename: "snapper-core.js",
