@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["SnapperCore"] = factory();
+		exports["SnappyGridCore"] = factory();
 	else
-		root["SnapperCore"] = factory();
+		root["SnappyGridCore"] = factory();
 })(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/snapper-core.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/snappy-grid-core.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -105,116 +105,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var cloneProperties = function cloneProperties(obj, properties) {
-  var deep = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-  var newObj = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-
-  if (!deep) {
-    newObj = _objectSpread({}, obj);
-    return newObj;
-  }
-
-  for (var prop in obj) {
-    if (properties.indexOf(prop) > -1) {
-      if (isPureObject(obj[properties])) cloneProperties(obj, properties, deep, newObj);else newObj[prop] = obj[prop];
-    }
-  }
-
-  return newObj;
-};
-
-var isPureObject = function isPureObject(item) {
-  return Object.prototype.toString.call(item) === '[object Object]';
-};
-
-var setDefaults = function setDefaults() {
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var defaults = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-  for (var optionName in defaults) {
-    if (!options.hasOwnProperty(optionName)) {
-      options[optionName] = defaults[optionName];
-    }
-  }
-
-  return options;
-};
-
-var getRelativePosition = function getRelativePosition(element, container) {
-  var containerPosition = _absolutePosition(container);
-
-  var elementPosition = _absolutePosition(element);
-
-  return {
-    top: elementPosition.top - containerPosition.top,
-    left: elementPosition.left - containerPosition.left
-  };
-};
-
-var parseBoolean = function parseBoolean(val, defaultVal) {
-  if (!isDefined(defaultVal)) throw 'snapper.parseBoolean can not be called without a default value provided';
-  if (!isDefined(val)) return defaultVal;
-  val = val.toString().toLowerCase().trim();
-  if (val === 'true') return true;else if (val === 'false') return false;else return defaultVal;
-};
-
-var objIsInArray = function objIsInArray(array, obj, key) {
-  var objKeyValue = obj[key];
-
-  for (var i = 0; i < array.length; i++) {
-    if (array[i][key] === objKeyValue) return true;
-  }
-
-  return false;
-};
-
 var isDefined = function isDefined(item) {
   return typeof item !== 'undefined' && item != null;
 };
 
-var absolutePosition = function absolutePosition(element) {
-  var position = element.getBoundingClientRect();
-  var body = getBody(element); // get the scroll top & left to add to the rect.top & left
-  // as the rect is relative to the viewport and ignores scroll position
-
-  var scrollTop = window.pageYOffset || body.scrollTop;
-  var scrollLeft = window.pageXOffset || body.scrollLeft; // remove any offset the body has
-
-  var clientTop = body.clientTop || 0;
-  var clientLeft = body.clientLeft || 0;
-  return {
-    top: Math.round(position.top + scrollTop - clientTop),
-    left: Math.round(position.left + scrollLeft - clientLeft)
-  };
-}; /// Returns { height: xx, width: xx } in px (inner values)
-// so excluding padding/margin/border
-
-
-var getInnerSize = function getInnerSize(element) {
-  var style = window.getComputedStyle ? getComputedStyle(element, null) : element.currentStyle; // The width and height of the element including padding, excluding borders and margins.
-
-  var clientWidth = element.clientWidth,
-      clientHeight = element.clientHeight;
-  return {
-    height: clientHeight - parseInt(style.paddingTop) - parseInt(style.paddingBottom),
-    width: clientWidth - parseInt(style.paddingLeft) - parseInt(style.paddingRight)
-  };
-};
-
 /* harmony default export */ __webpack_exports__["default"] = ({
-  cloneProperties: cloneProperties,
-  isPureObject: isPureObject,
-  setDefaults: setDefaults,
-  getRelativePosition: getRelativePosition,
-  parseBoolean: parseBoolean,
-  objIsInArray: objIsInArray,
-  isDefined: isDefined,
-  absolutePosition: absolutePosition,
-  getInnerSize: getInnerSize
+  isDefined: isDefined
 });
 
 /***/ }),
@@ -272,8 +168,7 @@ var defaultItemOptions = {
     ending: 'px'
   },
   meta: {
-    isDragging: false,
-    pseudo: false
+    isDragging: false
   }
 };
 var defaultPlaceholderStyles = {
@@ -311,17 +206,16 @@ var defaultGridOptions = {
   // class name for the resize handle
   resizeClassName: 'snap-resize-handle',
   enableCSS3: true,
-  // todo document
   algorithm: null
 };
 
 
 /***/ }),
 
-/***/ "./src/snapper-core.js":
-/*!*****************************!*\
-  !*** ./src/snapper-core.js ***!
-  \*****************************/
+/***/ "./src/snappy-grid-core.js":
+/*!*********************************!*\
+  !*** ./src/snappy-grid-core.js ***!
+  \*********************************/
 /*! exports provided: default, renderModeType, resizeOptions, defaultItemOptions, defaultGridOptions */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1115,4 +1009,4 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 /******/ });
 });
-//# sourceMappingURL=snapper-core.js.map
+//# sourceMappingURL=snappy-grid.js.map

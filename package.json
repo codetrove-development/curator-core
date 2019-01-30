@@ -1,14 +1,15 @@
 {
-  "name": "snapper-core",
+  "name": "snappy-grid-core",
   "version": "1.0.0-alpha",
   "description": "Core library for javascript draggable grid systems",
-  "main": "snapper-core.js",
+  "main": "./dist/snappy-grid-core.min.js",
   "scripts": {
     "build-dev": "webpack --mode development",
     "build-prod": "webpack --mode production"
   },
   "author": "Code Trove Limited",
   "license": "Code Trove Product License",
+  "package-name": "git+ssh://git@github.com:codetrove-development/snappy-grid-core<repo>.git",
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
@@ -20,5 +21,26 @@
   },
   "dependencies": {
     "webpack-merge": "^4.2.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/codetrove-development/snappy-grid-core" 
+  },
+  "bugs": {
+    "url": "https://github.com/codetrove-development/snappy-grid-core/issues"
+  },
+  "homepage": "https://github.com/codetrove-development/snappy-grid-core",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "keywords": [
+    "grid",
+    "grid-system",
+    "drag",
+    "draggable",
+    "drop",
+    "droppable",
+    "resize",
+    "resizable"
+  ]
 }

@@ -5,7 +5,7 @@ const baseConfig = {
   context: __dirname,
   
   entry: {
-    snapperCore: './src/snapper-core',
+    snapperCore: './src/snappy-grid-core',
   },
   module: {
     rules: [
@@ -24,9 +24,9 @@ const devConfig = merge( baseConfig, {
   devtool: 'source-map',
   output: {
     path: __dirname + "/build",
-    filename: "snapper-core.js",
+    filename: "snappy-grid.js",
     libraryTarget: "umd",
-    library: "SnapperCore"
+    library: "SnappyGridCore"
   }
 })
 
@@ -47,9 +47,9 @@ const prodConfig = merge( baseConfig, {
   },
   output: {
     path: __dirname + "/dist",
-    filename: "snapper-core.min.js",
+    filename: "snappy-grid-core.min.js",
     libraryTarget: "umd",
-    library: "SnapperCore"
+    library: "SnappyGridCore"
   }
 })
 
