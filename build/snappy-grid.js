@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["SnappyGridCore"] = factory();
+		exports["snappy-grid"] = factory();
 	else
-		root["SnappyGridCore"] = factory();
+		root["snappy-grid"] = factory();
 })(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -216,21 +216,13 @@ var defaultGridOptions = {
 /*!*********************************!*\
   !*** ./src/snappy-grid-core.js ***!
   \*********************************/
-/*! exports provided: default, renderModeType, resizeOptions, defaultItemOptions, defaultGridOptions */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./src/helpers.js");
 /* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./options */ "./src/options.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "renderModeType", function() { return _options__WEBPACK_IMPORTED_MODULE_1__["renderModeType"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "resizeOptions", function() { return _options__WEBPACK_IMPORTED_MODULE_1__["resizeOptions"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "defaultItemOptions", function() { return _options__WEBPACK_IMPORTED_MODULE_1__["defaultItemOptions"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "defaultGridOptions", function() { return _options__WEBPACK_IMPORTED_MODULE_1__["defaultGridOptions"]; });
-
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
@@ -1003,7 +995,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     };
   }
 });
-
 
 /***/ })
 

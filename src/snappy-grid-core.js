@@ -828,10 +828,3 @@ export default {
         return { widthPx, heightPx }
     }
 }
-
-export {
-    renderModeType, 
-    resizeOptions, 
-    defaultItemOptions, 
-    defaultGridOptions,
-}

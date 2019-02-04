@@ -3,9 +3,10 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const baseConfig = {
   context: __dirname,
-  
   entry: {
-    snapperCore: './src/snappy-grid-core',
+    'snappy-grid': './src/snappy-grid-core',
+    helpers: './src/helpers',
+    options: './src/options'
   },
   module: {
     rules: [
@@ -24,9 +25,9 @@ const devConfig = merge( baseConfig, {
   devtool: 'source-map',
   output: {
     path: __dirname + "/build",
-    filename: "snappy-grid.js",
+    filename: "[name].js",
     libraryTarget: "umd",
-    library: "SnappyGridCore"
+    library: "[name]"
   }
 })
 
