@@ -62,47 +62,21 @@ export default {
     },
 
     getItemPositionPercentages( gridWidth, gridHeight, gridRows, gridCols, width, height, left, top ) {
-        const pxPerColFloored = Math.floor(gridWidth / gridCols)
-        const pxPerRowFloored = Math.floor(gridHeight / gridRows)
-        const colRemainderPx = gridWidth - pxPerColFloored * gridCols
-        const rowRemainderPx = gridHeight - pxPerRowFloored * gridRows
-        // todo check if need to * by required precision and floor to avoid decimal calc
-        const widthPxOffset = (49 / gridWidth) / 100
-        const heightPxOffset = (49 / gridHeight) / 100
+        const leftPct = left / gridCols * 100
+        const topPct = top / gridRows * 100
+        const widthPct = width / gridCols * 100
+        const heightPct = height / gridRows * 100
 
-        const extraLeft = Math.min(left, colRemainderPx)
-        const extraWidth = Math.min(width + left, colRemainderPx) - extraLeft
-        const extraTop = Math.min(top, rowRemainderPx)
-        const extraHeight = Math.min(height + top, rowRemainderPx) - extraTop
-
-        // shift it by 2/5 px percent to always count for rounding errors
-        // could do anything below 1/2 but this is sufficient as 
-        // (40 / x = 0.01% limit => pxLimit = 40 / 0.01 = 4000px
-        const leftPct = ((left * pxPerColFloored + extraLeft) * 100) / gridWidth + widthPxOffset
-        const widthPct = ((width * pxPerColFloored + extraWidth) * 100) / gridWidth + widthPxOffset
-        const topPct = ((top * pxPerRowFloored + extraTop) * 100) / gridHeight + heightPxOffset
-        const heightPct = ((height * pxPerRowFloored + extraHeight) * 100) / gridHeight + heightPxOffset
-
-        const ending = '%';
+        const ending = '%'
 
         return { leftPct, widthPct, topPct, heightPct, ending }
     },
 
     getItemPositionPixels( gridWidth, gridHeight, gridRows, gridCols, width, height, left, top ) {
-        const pxPerColFloored = Math.floor(gridWidth / gridCols)
-        const pxPerRowFloored = Math.floor(gridHeight / gridRows)
-        const colRemainderPx = gridWidth - pxPerColFloored * gridCols
-        const rowRemainderPx = gridHeight - pxPerRowFloored * gridRows
-
-        const extraLeft = Math.min(left, colRemainderPx)
-        const extraWidth = Math.min(width + left, colRemainderPx) - extraLeft
-        const extraTop = Math.min(top, rowRemainderPx)
-        const extraHeight = Math.min(height + top, rowRemainderPx) - extraTop
-
-        const widthPx = pxPerColFloored * width + extraWidth
-        const heightPx = pxPerRowFloored * height + extraHeight
-        const topPx = pxPerRowFloored * top + extraTop
-        const leftPx = pxPerColFloored * left + extraLeft
+        const widthPx = gridWidth / gridCols * width
+        const heightPx = gridHeight / gridRows * height
+        const topPx = gridHeight / gridRows * top
+        const leftPx = gridWidth / gridCols * left
 
         const ending = 'px';
 
