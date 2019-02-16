@@ -1,6 +1,6 @@
 {
-  "name": "snappy-grid-core",
-  "version": "1.0.11-alpha",
+  "name": "curator-core",
+  "version": "1.0.2-alpha",
   "description": "Core library for javascript draggable grid systems",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "author": "Code Trove Limited",
   "license": "Code Trove Product License",
-  "package-name": "git+ssh://git@github.com:codetrove-development/snappy-grid-core<repo>.git",
+  "package-name": "git+ssh://git@github.com:codetrove-development/curator-core<repo>.git",
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
@@ -24,12 +24,12 @@
   "dependencies": {},
   "repository": {
     "type": "git",
-    "url": "git@github.com/codetrove-development/snappy-grid-core"
+    "url": "git@github.com/codetrove-development/curator-core"
   },
   "bugs": {
-    "url": "https://github.com/codetrove-development/snappy-grid-core/issues"
+    "url": "https://github.com/codetrove-development/curator-core/issues"
   },
-  "homepage": "https://github.com/codetrove-development/snappy-grid-core",
+  "homepage": "https://github.com/codetrove-development/curator-core",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
