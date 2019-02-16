@@ -4,7 +4,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const baseConfig = {
   context: __dirname,
   entry: {
-    'snappy-grid': './src/snappy-grid-core',
+    'curator-core': './src/curator-core',
     helpers: './src/helpers',
     options: './src/options'
   },
@@ -48,9 +48,9 @@ const prodConfig = merge( baseConfig, {
   },
   output: {
     path: __dirname + "/dist",
-    filename: "snappy-grid-core.min.js",
+    filename: "[name].min.js",
     libraryTarget: "umd",
-    library: "SnappyGridCore"
+    library: "CuratorCore"
   }
 })
 
