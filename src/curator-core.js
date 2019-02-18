@@ -22,23 +22,8 @@ export default {
         }
     },
 
-    getItemClasses( itemOptions = defaultItemOptions ) {
-        const classes = [ ...itemOptions.classes, itemOptions.itemClassName ]
-
-        if ( itemOptions.glued ) {
-            classes.push('snapper-glued')
-        }
-
-        return classes
-    },
-
     getEmptyGrid( gridRows ) {
-        let grid = []
-
-        for( let r = 0; r < gridRows; r++ )
-            grid.push( [] )
-
-        return grid
+        return Array.from( Array( gridRows ), _ => [] );
     },
 
     /// 
@@ -85,11 +70,12 @@ export default {
 
     updateMovedItem( item, gridSizing, gridOptions ) {
         const { newX, newY, newWidth, newHeight } = item
-        const { gridWidth, gridHeight, gridRows, gridColumns } = gridSizing
+        const { widthPx, heightPx, gridRows, gridColumns } = gridSizing
         const renderMode = gridOptions.renderMode
         const movedItem = { ...item }
 
         if ( ! ( newWidth && newHeight ) ) {
+            // todo
             console.error( `Item ${ key } does not have a newWidth or newHeight value. Unable to correctly resize item`)
             return item
         }
@@ -107,13 +93,6 @@ export default {
         movedItem.styles = { ...styles }
 
         return movedItem
-    },
-
-    updateGridWithMovedItems( grid, items ) {
-        for ( const key in items ) {
-            const movedItem = items[ key ]
-            this.updateGridWithItemMovement( grid, movedItem, movedItem.x, movedItem.y, movedItem.width, movedItem.height )
-        }
     },
 
     getUpdatedMovedItems( items, draggedItemId, newTopPx, newLeftPx, newWidthPx, newHeightPx, gridSizing, gridOptions ) {
@@ -142,15 +121,15 @@ export default {
     },
 
     getUpdatedGridSizeItems( items, gridOptions, gridSizing, ignoreIds = [] ) {
-        const renderMode = gridOptions.renderMode
-        const { gridRows, gridColumns, gridHeight, gridWidth } = gridSizing 
+        const { gridRows, gridColumns, renderMode } = gridOptions
+        const { heightPx, widthPx } = gridSizing 
 
         return items.map( ( item ) => {
             
             if ( ignoreIds.indexOf( item.id ) > -1 )
                 return
 
-            const position = this.getItemPosition( gridWidth, gridHeight, gridRows, gridColumns, item.width, item.height, item.x, item.y, renderMode )
+            const position = this.getItemPosition( widthPx, heightPx, gridRows, gridColumns, item.width, item.height, item.x, item.y, renderMode )
             const styles = this.getItemPositionStyles( gridOptions, item.styles, position )
 
             return {
@@ -162,21 +141,21 @@ export default {
     },
 
     getGridBoundaries( gridSizing ) {
-        const { gridWidth, gridHeight } = gridSizing
+        const { widthPx, heightPx } = gridSizing
 
         return {
             leftBoundary: 0,
-            rightBoundary: gridWidth,
+            rightBoundary: widthPx,
             topBoundary: 0,
-            bottomBoundary: gridHeight
+            bottomBoundary: heightPx
         }
     },
 
     getItemSizing( itemProps, gridSizing ) {
-        const { gridWidth, gridHeight } = gridSizing
+        const { widthPx, heightPx } = gridSizing
         const { width, height } = itemProps
-        const pxPerColumn = gridWidth / gridColumns
-        const pxPerRow = gridHeight / gridRows
+        const pxPerColumn = widthPx / gridColumns
+        const pxPerRow = heightPx / gridRows
         const itemWidthPx = width * pxPerColumn
         const itemHeightPx = height * pxPerRow
 
@@ -357,9 +336,10 @@ export default {
 
     checkProposedGridSizing( state, proposedGridColumns, proposedGridRows ) {
         const {  gridOptions } = state
+        const { itemsCanResizeGrid, resizeGridDirections } = gridOptions
 
-        const canResizeX = ( gridOptions.resizeGridDirections !== resizeOptions.y )
-        const canResizeY = ( gridOptions.resizeGridDirections !== resizeOptions.x )
+        const canResizeX = ( itemsCanResizeGrid && resizeGridDirections !== resizeOptions.y )
+        const canResizeY = ( itemsCanResizeGrid && resizeGridDirections !== resizeOptions.x )
 
         if ( ( !canResizeX && proposedGridColumns !== gridOptions.gridColumns ) || gridOptions.gridColumns < 1 )
             throw 'Invalid grid column proposition from algorithm'
@@ -479,7 +459,7 @@ export default {
                     }
     
                     movedItem.styles = this.getItemPositionStyles( gridOptions, movedItem.styles, movedItem.position )
-                    console.log( movedItem.styles )
+                    //console.log( movedItem.styles )
                 }
                 else {
                     movedItem.position = position
@@ -665,7 +645,8 @@ export default {
         this.setGridWithValue( grid, id, x, y, width, height, itemProps, true )
     },
 
-    removeGridItem( gridItems, grid, itemProps, gridOptions, gridSizing ) {
+    removeGridItem( state, itemProps ) {
+        const { grid, items, gridOptions, gridSizing } = state
         const { id, x, y, width, height } = itemProps
         const { widthPx, heightPx } = gridSizing
         const { renderMode } = gridOptions
@@ -674,9 +655,9 @@ export default {
         this.setGridWithValue( grid, id, x, y, width, height, undefined, true )
 
         // todo handle grid resize
-        const itemsReverted = gridOptions.algo.onGridItemRemoved( itemProps, grid, gridOptions )
+        const itemsReverted = gridOptions.algo.onGridItemRemoved( state, itemProps )
 
-        const updatedItems = gridItems
+        const updatedItems = items
             .map( item => {
                 const revertDetails = itemsReverted.find( i => i.id === item.id )
 
@@ -768,7 +749,7 @@ export default {
     /// Gets the internal grid x,y equivalent for the supplied top & left px values
     ///
     getGridXY( gridSizing, topPx, leftPx ) {
-        const { gridWidth, gridHeight, gridRows, gridColumns } = gridSizing
+        const { widthPx, heightPx, gridRows, gridColumns } = gridSizing
         
         const x = this.getGridPosition( gridWidth, leftPx, gridColumns )
         const y = this.getGridPosition( gridHeight, topPx, gridRows )

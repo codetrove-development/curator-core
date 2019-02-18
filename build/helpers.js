@@ -109,8 +109,16 @@ var isDefined = function isDefined(item) {
   return typeof item !== 'undefined' && item != null;
 };
 
+var objIsInArray = function objIsInArray(array, obj, key) {
+  var objKeyValue = obj[key];
+  return array.find(function (item) {
+    return item[key] === objKeyValue;
+  }) != null;
+};
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  isDefined: isDefined
+  isDefined: isDefined,
+  objIsInArray: objIsInArray
 });
 
 /***/ })

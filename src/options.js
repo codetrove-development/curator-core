@@ -21,11 +21,10 @@ const defaultItemOptions = {
     y: 0,
     width: 1,
     height: 1,
-    classes: [],
+    className: 'grid-item',
     glued: false,
     // not yet supported but is partially done in the algo, do not alter
     visible: true,
-    canResize: true,
     displayResize: true,
     position: {
         topPx: 0,
@@ -40,6 +39,7 @@ const defaultItemOptions = {
     },
     meta: {
         isDragging: false,
+        isResizing: false
     }
 }
 
@@ -54,9 +54,6 @@ const defaultGridOptions = {
     gridRows: 12,
     width: '100%',
     height: '100%',
-    itemClassName: 'grid-item',
-    // any extra classes to add to the element
-    classes: [],
     // whether to render the grid items using percentages or pixel values
     renderMode: renderModeType.flex,
     // when a dragged element pushes others out of the way, they may return to their 
@@ -77,9 +74,9 @@ const defaultGridOptions = {
     // On all transitions completed for a given element
     onAllTransitionsComplete: ( element, details, eventIfFired ) => { },
     // class name for the resize handle
-    resizeClassName: 'snap-resize-handle',
+    resizeClassName: 'resize-handle',
     enableCSS3: true,
-    algorithm: null,
+    algo: null,
 }
 
 export {

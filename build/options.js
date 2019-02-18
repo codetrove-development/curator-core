@@ -185,9 +185,9 @@ var defaultGridOptions = {
   // On all transitions completed for a given element
   onAllTransitionsComplete: function onAllTransitionsComplete(element, details, eventIfFired) {},
   // class name for the resize handle
-  resizeClassName: 'snap-resize-handle',
+  resizeClassName: 'resize-handle',
   enableCSS3: true,
-  algorithm: null
+  algo: null
 };
 
 
