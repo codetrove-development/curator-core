@@ -54,11 +54,9 @@ const defaultGridOptions = {
     gridRows: 12,
     width: '100%',
     height: '100%',
+    className: 'curator-grid',
     // whether to render the grid items using percentages or pixel values
     renderMode: renderModeType.flex,
-    // when a dragged element pushes others out of the way, they may return to their 
-    // old spot if dragging continues
-    stickyElements: true,
     // show the grid lines: not currently supported
     //showGrid: false,
     // can resize the grid by dragging elements
