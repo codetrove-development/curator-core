@@ -1,6 +1,6 @@
 {
   "name": "curator-core",
-  "version": "1.0.2-alpha",
+  "version": "1.0.6-beta",
   "description": "Core library for javascript draggable grid systems",
   "main": "index.js",
   "scripts": {
@@ -16,8 +16,9 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
-    "webpack": "4.19.1",
-    "webpack-cli": "^2.1.4",
+    "uglifyjs-webpack-plugin": "^2.1.1",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3",
     "webpack-merge": "^4.2.1"
   },
   "prepublish": "webpack --mode development",

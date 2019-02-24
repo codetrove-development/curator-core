@@ -7,7 +7,7 @@
 		exports["options"] = factory();
 	else
 		root["options"] = factory();
-})(window, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -131,11 +131,10 @@ var defaultItemOptions = {
   y: 0,
   width: 1,
   height: 1,
-  classes: [],
+  className: 'grid-item',
   glued: false,
   // not yet supported but is partially done in the algo, do not alter
   visible: true,
-  canResize: true,
   displayResize: true,
   position: {
     topPx: 0,
@@ -149,7 +148,8 @@ var defaultItemOptions = {
     ending: 'px'
   },
   meta: {
-    isDragging: false
+    isDragging: false,
+    isResizing: false
   }
 };
 var defaultPlaceholderStyles = {
@@ -162,9 +162,7 @@ var defaultGridOptions = {
   gridRows: 12,
   width: '100%',
   height: '100%',
-  itemClassName: 'grid-item',
-  // any extra classes to add to the element
-  classes: [],
+  className: 'curator-grid',
   // whether to render the grid items using percentages or pixel values
   renderMode: renderModeType.flex,
   // when a dragged element pushes others out of the way, they may return to their 

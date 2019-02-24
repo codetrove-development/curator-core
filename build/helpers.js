@@ -7,7 +7,7 @@
 		exports["helpers"] = factory();
 	else
 		root["helpers"] = factory();
-})(window, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};

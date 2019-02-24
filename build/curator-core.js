@@ -7,7 +7,7 @@
 		exports["curator-core"] = factory();
 	else
 		root["curator-core"] = factory();
-})(window, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -115,14 +115,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
 // Snapper core is responsible for handling all logic for interacting with the grid
 // except:
 // 1. direct ui manipulation (responsibility of the wrapper)
@@ -136,18 +128,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       boxSizing: 'border-box',
       position: 'absolute'
     };
-  },
-  getItemClasses: function getItemClasses() {
-    var itemOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _options__WEBPACK_IMPORTED_MODULE_1__["defaultItemOptions"];
-    var gridOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _options__WEBPACK_IMPORTED_MODULE_1__["defaultGridOptions"];
-
-    var classes = _toConsumableArray(itemOptions.classes).concat([gridOptions.itemClassName]);
-
-    if (itemOptions.glued) {
-      classes.push('snapper-glued');
-    }
-
-    return classes;
   },
   getEmptyGrid: function getEmptyGrid(gridRows) {
     return Array.from(Array(gridRows), function (_) {
@@ -403,11 +383,15 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         gridOptions = state.gridOptions;
     var pxPerColumn = gridSizing.widthPx / gridOptions.gridColumns;
     var pxPerRow = gridSizing.heightPx / gridOptions.gridRows;
+    var newWidthPx = pxPerColumn * itemProps.width;
+    var newHeightPx = pxPerRow * itemProps.height;
+    var newLeftPx = pxPerColumn * itemProps.x;
+    var newTopPx = pxPerRow * itemProps.y;
     return {
-      newWidthPx: Math.round(pxPerColumn * itemProps.width),
-      newHeightPx: Math.round(pxPerRow * itemProps.height),
-      newLeftPx: Math.round(pxPerColumn * itemProps.x),
-      newTopPx: Math.round(pxPerRow * itemProps.y),
+      newWidthPx: newWidthPx,
+      newHeightPx: newHeightPx,
+      newLeftPx: newLeftPx,
+      newTopPx: newTopPx,
       newX: itemProps.x,
       newY: itemProps.y,
       newWidth: itemProps.width,
@@ -418,11 +402,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     var targetItem = _objectSpread({}, itemProps, {
       position: _objectSpread({}, itemProps.position, {
         ending: 'px',
-        topPx: movementChange.newTopPx,
-        // todo this is wrong
-        leftPx: movementChange.newLeftPx,
-        widthPx: movementChange.newWidthPx,
-        heightPx: movementChange.newHeightPx
+        topPx: Math.max(0, movementChange.newTopPx),
+        leftPx: Math.max(0, movementChange.newLeftPx),
+        widthPx: Math.max(0, movementChange.newWidthPx),
+        heightPx: Math.max(0, movementChange.newHeightPx)
       })
     });
 
@@ -490,7 +473,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         newHeight = movementChange.newHeight;
     var canResizeX = itemsCanResizeGrid && resizeGridDirections !== 'y';
     var canResizeY = itemsCanResizeGrid && resizeGridDirections !== 'x';
-    return (canResizeX || newX + newWidth <= gridColumns) && (canResizeY || newY + newHeight <= gridRows);
+    return (canResizeX || newX + newWidth <= gridColumns) && (canResizeY || newY + newHeight <= gridRows) && newX >= 0 && newY >= 0 && newWidth > 0 && newHeight > 0;
   },
   onItemMovement: function onItemMovement(itemProps, state, movementChange) {
     var _this3 = this;
@@ -524,11 +507,14 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     var updatedItems = Object.keys(dragResult.itemsToMove).map(function (key) {
       var movedItem = dragResult.itemsToMove[key];
+      var _movedItem$meta = movedItem.meta,
+          isDragging = _movedItem$meta.isDragging,
+          isResizing = _movedItem$meta.isResizing;
 
       var position = _this3.getItemPosition(gridWidth, gridHeight, dragResult.gridRows, dragResult.gridColumns, movedItem.width, movedItem.height, movedItem.x, movedItem.y, renderMode); // without these the item will jitter
 
 
-      if (movedItem.id === draggedItem.id) {
+      if (movedItem.id === draggedItem.id && (isDragging || isResizing)) {
         var placeholderStyles = _this3.getPlaceholderStyles(position);
 
         movedItem.meta = _objectSpread({}, movedItem.meta, {
@@ -536,12 +522,13 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         });
         movedItem.position = _objectSpread({}, movedItem.position, {
           ending: 'px',
+          // movedItem.meta.isDragging || movedItem.meta.isResizing ? 'px' : '%',
           topPx: movementChange.newTopPx,
           leftPx: movementChange.newLeftPx,
           widthPx: movementChange.newWidthPx,
           heightPx: movementChange.newHeightPx
         });
-        movedItem.styles = _this3.getItemPositionStyles(gridOptions, movedItem.styles, movedItem.position); //console.log( movedItem.styles )
+        movedItem.styles = _this3.getItemPositionStyles(gridOptions, movedItem.styles, movedItem.position);
       } else {
         movedItem.position = position;
         movedItem.styles = _this3.getItemPositionStyles(gridOptions, movedItem.styles, position);
@@ -919,11 +906,10 @@ var defaultItemOptions = {
   y: 0,
   width: 1,
   height: 1,
-  classes: [],
+  className: 'grid-item',
   glued: false,
   // not yet supported but is partially done in the algo, do not alter
   visible: true,
-  canResize: true,
   displayResize: true,
   position: {
     topPx: 0,
@@ -937,7 +923,8 @@ var defaultItemOptions = {
     ending: 'px'
   },
   meta: {
-    isDragging: false
+    isDragging: false,
+    isResizing: false
   }
 };
 var defaultPlaceholderStyles = {
@@ -950,9 +937,7 @@ var defaultGridOptions = {
   gridRows: 12,
   width: '100%',
   height: '100%',
-  itemClassName: 'grid-item',
-  // any extra classes to add to the element
-  classes: [],
+  className: 'curator-grid',
   // whether to render the grid items using percentages or pixel values
   renderMode: renderModeType.flex,
   // when a dragged element pushes others out of the way, they may return to their 
