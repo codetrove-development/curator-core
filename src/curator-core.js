@@ -282,11 +282,16 @@ export default {
         const pxPerColumn = gridSizing.widthPx / gridOptions.gridColumns
         const pxPerRow = gridSizing.heightPx / gridOptions.gridRows
 
+        const newWidthPx = pxPerColumn * itemProps.width
+        const newHeightPx = pxPerRow * itemProps.height
+        const newLeftPx = pxPerColumn * itemProps.x
+        const newTopPx = pxPerRow * itemProps.y
+
         return {
-            newWidthPx: Math.round( pxPerColumn * itemProps.width ),
-            newHeightPx: Math.round( pxPerRow * itemProps.height ),
-            newLeftPx: Math.round( pxPerColumn * itemProps.x ),
-            newTopPx: Math.round( pxPerRow * itemProps.y ),
+            newWidthPx,
+            newHeightPx,
+            newLeftPx,
+            newTopPx,
             newX: itemProps.x,
             newY: itemProps.y,
             newWidth: itemProps.width,
@@ -300,10 +305,10 @@ export default {
             position: {
                 ...itemProps.position,
                 ending: 'px',
-                topPx: movementChange.newTopPx, // todo this is wrong
-                leftPx: movementChange.newLeftPx,
-                widthPx: movementChange.newWidthPx,
-                heightPx: movementChange.newHeightPx
+                topPx: Math.max( 0, movementChange.newTopPx ),
+                leftPx: Math.max( 0, movementChange.newLeftPx ),
+                widthPx: Math.max( 0, movementChange.newWidthPx ),
+                heightPx: Math.max( 0, movementChange.newHeightPx )
             }
         }
 
@@ -393,6 +398,10 @@ export default {
 
         return ( canResizeX || ( newX + newWidth <= gridColumns ) )
             && ( canResizeY || ( newY + newHeight <= gridRows  ) )
+            && newX >= 0
+            && newY >= 0
+            && newWidth > 0
+            && newHeight > 0
     },
 
     onItemMovement( itemProps, state, movementChange ) {
@@ -427,6 +436,7 @@ export default {
         const updatedItems = Object.keys( dragResult.itemsToMove )
             .map(key => {
                 const movedItem = dragResult.itemsToMove[ key ]
+                const { isDragging, isResizing } = movedItem.meta
 
                 const position = this.getItemPosition( 
                     gridWidth, 
@@ -441,7 +451,7 @@ export default {
                 )
     
                 // without these the item will jitter
-                if ( movedItem.id === draggedItem.id ) {
+                if ( movedItem.id === draggedItem.id && ( isDragging || isResizing ) ) {
                     const placeholderStyles = this.getPlaceholderStyles( position )
     
                     movedItem.meta = {
@@ -451,7 +461,7 @@ export default {
     
                     movedItem.position = {
                         ...movedItem.position,
-                        ending: 'px',
+                        ending: 'px',// movedItem.meta.isDragging || movedItem.meta.isResizing ? 'px' : '%',
                         topPx: movementChange.newTopPx,
                         leftPx: movementChange.newLeftPx,
                         widthPx: movementChange.newWidthPx,
@@ -459,7 +469,6 @@ export default {
                     }
     
                     movedItem.styles = this.getItemPositionStyles( gridOptions, movedItem.styles, movedItem.position )
-                    //console.log( movedItem.styles )
                 }
                 else {
                     movedItem.position = position
