@@ -27,7 +27,8 @@ const devConfig = merge( baseConfig, {
     path: __dirname + "/build",
     filename: "[name].js",
     libraryTarget: "umd",
-    library: "[name]"
+    library: "[name]",
+    globalObject: "typeof self !== 'undefined' ? self : this"
   }
 })
 
@@ -50,7 +51,8 @@ const prodConfig = merge( baseConfig, {
     path: __dirname + "/dist",
     filename: "[name].min.js",
     libraryTarget: "umd",
-    library: "CuratorCore"
+    library: "CuratorCore",
+    globalObject: "typeof self !== 'undefined' ? self : this"
   }
 })
 
