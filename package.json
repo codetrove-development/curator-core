@@ -30,7 +30,7 @@
   "bugs": {
     "url": "https://github.com/codetrove-development/curator-core/issues"
   },
-  "homepage": "https://github.com/codetrove-development/curator-core",
+  "homepage": "https://codetrove.co.uk",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
