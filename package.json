@@ -1,6 +1,6 @@
 {
   "name": "curator-core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Core library for javascript draggable grid systems",
   "main": "index.js",
   "scripts": {
